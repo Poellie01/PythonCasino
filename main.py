@@ -2,7 +2,43 @@ import os
 import random
 import time
 
-#TODO Check in game-functions if bet is a String
+#Main menu to select game
+def main_menu(wallet):
+	clearConsole()
+	print("----[Welcome to Casino Royale]----")
+	print("----[Select your game]----\n")
+
+	print("[1] Roulette 	 [4] Blackjack 	 	[7] Deposit money")
+	print("[2] Poker 	 [5] Horses 		 [8] Widthdraw money")
+	print("[3] Slots 	 [6] Coming Soon 	 [9] Exit" + "\n")
+	errorHandling(wallet)
+
+	print("Wallet: $", wallet)
+	game = input("\nPlease Select your game: ")
+
+	if game == "1":
+		roulette(wallet)
+	elif game == "3":
+		slots(wallet)
+	elif game == "4":
+		blackjack(wallet)
+	elif game == "5":
+		horses(wallet)
+	elif game == "7":
+		depositFunds(wallet)
+	elif game == "8":
+		withdrawFunds(wallet)
+
+#Check if int
+def errorHandling(arg1, arg2="", arg3="", arg4=""):
+	if isinstance(arg1, int):
+		pass
+	else:
+		usage()
+
+def usage():
+	print("Please use an integer! Stupid ass bitch! ")
+	#main_menu(wallet)
 
 # Function to clear console at start of other functions
 def clearConsole():
@@ -23,20 +59,18 @@ def showTip():
 #Checks whether the bet was over the wallet amount
 def betCheck(wallet, bet):
 
-	if isinstance(bet, int) == True:
-		if bet == 0:
-			main_menu(wallet)
+	if bet == 0:
+		main_menu(wallet)
 	
-		if wallet == 0:
-			print("Sorry! Not enough funds!")
-			time.sleep(3)
-			main_menu(wallet)
+	if wallet == 0:
+		print("Sorry! Not enough funds!")
+		time.sleep(3)
+		main_menu(wallet)
 
-		if bet > wallet:
-			print("Not enough funds for that bet!")
-			time.sleep(1.4)
-			main_menu(wallet)
-
+	if bet > wallet:
+		print("Not enough funds for that bet!")
+		time.sleep(1.4)
+		main_menu(wallet)
 
 #Deposit new funds into wallet
 def depositFunds(wallet):
@@ -65,38 +99,6 @@ def withdrawFunds(wallet):
 	print("Succesfully withdrawed: $", withdrawal)
 	time.sleep(2)
 	main_menu(wallet)
-
-#Start the script and deposit funds
-clearConsole()
-print("----[Welcome to Casino Royale]----\n")
-wallet = int(input("Please deposit funds: $"))
-
-#Main menu to select game
-def main_menu(wallet):
-
-	clearConsole()
-	print("----[Welcome to Casino Royale]----")
-	print("----[Select your game]----\n")
-
-	print("[1] Roulette 	 [4] Blackjack 	 	[7] Deposit money")
-	print("[2] Poker 	 [5] Horses 		 [8] Widthdraw money")
-	print("[3] Slots 	 [6] Coming Soon 	 [9] Exit" + "\n")
-
-	print("Wallet: $", wallet)
-	game = input("\nPlease Select your game: ")
-
-	if game == "1":
-		roulette(wallet)
-	elif game == "3":
-		slots(wallet)
-	elif game == "4":
-		blackjack(wallet)
-	elif game == "5":
-		horses(wallet)
-	elif game == "7":
-		depositFunds(wallet)
-	elif game == "8":
-		withdrawFunds(wallet)
 
 #Select different slot machine.
 def slots(wallet):
@@ -314,7 +316,7 @@ def tycoon(wallet):
 
 	return wallet
 
-
+#Sweet bonanza slot machine game
 def sweet_bonanza(wallet):
 		clearConsole()
 		lane1 = ['Bonus Bomb','Grapes','Banana','Lemon','Pear','Strawberry']
@@ -374,7 +376,7 @@ def sweet_bonanza(wallet):
 
 		return wallet
 
-
+#Horse betting
 def horses(wallet):
 
 	clearConsole()
@@ -391,7 +393,7 @@ def horses(wallet):
 
 	selected_horse = input("Please select your horse: ")
 	
-	bet = int(input("How much would you like to bet?: "))
+	bet = input("How much would you like to bet?: ")
 	
 	#Check if bet is an integer
 	if errorHandling(bet, wallet, selected_horse):
@@ -415,14 +417,15 @@ def horses(wallet):
 		clearConsole()
 		horses()
 
-#Check if int
-def errorHandling(arg1, arg2="", arg3="", arg4=""):
-	if isinstance(arg1, int) and betCheck(wallet) == True:
-		pass
-	else:
-		usage()
-
-def usage():
-	print("Please use an integer")
-
-main_menu(wallet)
+#Start the script and deposit funds
+clearConsole()
+try:
+	print("----[Welcome to Casino Royale]----\n")
+	wallet = int(input("Please deposit funds: $"))
+	errorHandling(wallet)
+	main_menu(wallet)
+except:
+	print("Not a INT!")
+	time.sleep(2)
+	main_menu(wallet=0)
+	

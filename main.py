@@ -2,6 +2,8 @@ import os
 import random
 import time
 
+#TODO Add Poker game
+
 #Main menu to select game
 def main_menu(wallet):
 	clearConsole()

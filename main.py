@@ -194,74 +194,74 @@ def blackjack(wallet):
 	return wallet
 
 #New blackjack with betting and standing.
-def blackjackV2(wallet, totalPlayer=0, totalDealer=0, game_continued=None):
+def blackjackV2(wallet, totalDealer=0, totalPlayer=0, game_continued=False):
+        #clearConsole()
+        dealer_first_card = random.randint(1, 11)
+        dealer_second_card = random.randint(1, 11)
+        your_first_card = random.randint(1, 11)
+        your_second_card = random.randint(1, 11)
+        new_card = random.randint(1, 11) 
 
-	clearConsole()
+        if game_continued == False:
+            # This is in the beginning
+            print("----[Blackjack]----")
+            print("[*] New game started")
+            print("If you bet 0, you'll return to the main menu\n")
+            print("Balance: $", wallet)
+            totalDealer = dealer_first_card + dealer_second_card
+            totalPlayer = your_first_card + your_second_card
 
-	if game_continued == False:
-		# This is in the beginning
-		firstCard_player = random.randint(1,11)
-		firstCard_dealer = random.randint(1,11)
-
-		secondCard_player = random.randint(1,11)
-		secondCard_dealer = random.randint(1,11)
-	else:
-		firstCard_player = random.randint(1,11)
-		firstCard_dealer = random.randint(1,11)
-
-		secondCard_player = random.randint(1,11)
-		secondCard_dealer = random.randint(1,11)
-
-
-	# TODO We need to write a switch that knows if the game is continued so it adds the new card to totalPlayer and totalDealer
-
-
-	print("----[Now playing Blackjack]----")
-	print("If you bet 0, you'll return to the main menu\n")
-	print("Wallet: $", wallet)
+        else:
+            print("----[Blackjack]----")
+            print("Continuing the game..")
+            print("Balance: $", wallet)
 
 
-	bet = int(input("Please place your bets: $"))
+        # TODO Draw code
+        # TODO Win code
+        # TODO Fix unlimited wallet
+        # Blackjack = bet +  bet * 1.5
+        # Draw(push) = bet * 1
+        # Win = bet + bet * 1 
+        # Lose = das pech geld weg
 
-	print("First card: ",firstCard_player)
-	time.sleep(2)
-	print("Dealer first card: ", firstCard_dealer)
-	time.sleep(2)
-	print("Second card player: ", secondCard_player)
-	time.sleep(1)
-	totalPlayer = firstCard_player + secondCard_player
-	print("Total: ", totalPlayer)
+        if totalPlayer <= 20:
+            bet = int(input("Please place your bets: $ "))
+            print("The dealer is handing out cards..")
+            time.sleep(1)
+            print(f"Dealer: {totalDealer}\nYou: {totalPlayer}")
+            wallet -= bet
+            stbet = input("Do you want to HIT or STAND? H/S: ")
+            if stbet.lower() == "h":
+                print("You chose hit. The dealer is drawing a card for you.")
+                time.sleep(1)
+                totalDealer += new_card #Reveal hidden card
+                totalPlayer += new_card #Draw card for u
+                print(f"Dealer reveals his hidden card {totalDealer}. And your card is {totalPlayer}")
+                if totalPlayer > 22:
+                    print("Cards: ", totalPlayer)
+                    print("Too bad! You lost!")
+                    blackjackV2(wallet, game_continued=False)
+                elif totalPlayer == 21:
+                    print("Cards: ", totalPlayer)
+                    print("Blackjack!")
+                    wallet += bet * 2.5
+                    blackjackV2(wallet, game_continued=False)
 
-	totalDealer = firstCard_dealer + secondCard_dealer
-	# print(totalDealer)
-
-	if totalPlayer <= 20:
-		stbet = input("Do you want to stand or bet? s/b: ")
-		if stbet == "b":
-			card = random.randint(1,11)
-			print("New card: ", card)
-			time.sleep(1.5)
-			card += totalPlayer
-			if totalPlayer > 22:
-				print("Cards: ",totalPlayer)
-				print("Too bad! You lost!")
-				time.sleep(2)
-			elif totalPlayer == 21:
-				print("Cards: ", totalPlayer)
-				print("Blackjack!")
-			else:
-				if totalPlayer < totalDealer and totalDealer >= 17:
-					print("Your Cards: ", totalPlayer)
-					print("Dealer got: ")
-					print("Too bad! You lost!")
-					time.sleep(3)
-					blackjackV2(wallet)
-				elif totalplayer > totalDealer and totalDealer <= 17:
-				else:
-					card1 = random.randint(1,11)
-					card += totalPlayer
-					blackjackV2(wallet, totalPlayer, totalDealer, game_continued=True)
-		if stbet =="s":
+                else:
+                    if totalPlayer < totalDealer and totalDealer >= 17:
+                        print("You:", totalPlayer)
+                        print("Dealer:", totalDealer)
+                        print("Too bad! You lost!")
+                        time.sleep(2)
+                        blackjackV2(wallet)
+                    elif totalDealer > 21:
+                      print("You win")
+                      wallet += bet * 2
+                      blackjackV2(wallet, game_continued=False)
+                    else:
+                        blackjackV2(wallet, totalPlayer,
+                                    totalDealer, game_continued=True)
 			
 
 #Fire joker slot machine

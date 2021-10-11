@@ -4,43 +4,35 @@ import time
 
 #TODO Add Poker game
 
+
 #Main menu to select game
 def main_menu(wallet):
 	clearConsole()
-	print("----[Welcome to Casino Royale]----")
+	print("----[Welcome to Casino Royale Bjorn bitchboy]----")
 	print("----[Select your game]----\n")
 
 	print("[1] Roulette 	 [4] Blackjack 	 	[7] Deposit money")
 	print("[2] Poker 	 [5] Horses 		 [8] Widthdraw money")
-	print("[3] Slots 	 [6] Coming Soon 	 [9] Exit" + "\n")
-	errorHandling(wallet)
+	print("[3] Slots 	 [6] Blackjack V2 	 [9] Exit" + "\n")
+	# errorHandling(wallet)
 
 	print("Wallet: $", wallet)
-	game = input("\nPlease Select your game: ")
+	game = int(input("\nPlease Select your game: "))
 
-	if game == "1":
+	if game == 1:
 		roulette(wallet)
-	elif game == "3":
+	elif game == 3:
 		slots(wallet)
-	elif game == "4":
+	elif game == 4:
 		blackjack(wallet)
-	elif game == "5":
+	elif game == 5:
 		horses(wallet)
-	elif game == "7":
+	elif game == 6:
+		blackjackV2(wallet)
+	elif game == 7:
 		depositFunds(wallet)
-	elif game == "8":
-		withdrawFunds(wallet)
-
-#Check if int
-def errorHandling(arg1, arg2="", arg3="", arg4=""):
-	if isinstance(arg1, int):
-		pass
-	else:
-		usage()
-
-def usage():
-	print("Please use an integer! Stupid ass bitch! ")
-	#main_menu(wallet)
+	elif game == 8:
+		withdrawFunds(wallet)	
 
 # Function to clear console at start of other functions
 def clearConsole():
@@ -154,7 +146,7 @@ def roulette(wallet):
 		print("Too bad! You lost! Winning number was: \n", winning_number)
 		wallet -= bet
 		time.sleep(3.5)
-		main_menu()
+		main_menu(wallet)
 
 	return wallet
 
@@ -164,6 +156,7 @@ def blackjack(wallet):
 
 	dealerHand = random.randint(17,27)
 	playerHand = random.randint(17,27)
+
 
 	print("----[Now playing Blackjack]----\n")
 	print("If you bet 0, you'll return to the main menu\n")
@@ -199,6 +192,77 @@ def blackjack(wallet):
 		blackjack(wallet)
 
 	return wallet
+
+#New blackjack with betting and standing.
+def blackjackV2(wallet, totalPlayer=0, totalDealer=0, game_continued=None):
+
+	clearConsole()
+
+	if game_continued == False:
+		# This is in the beginning
+		firstCard_player = random.randint(1,11)
+		firstCard_dealer = random.randint(1,11)
+
+		secondCard_player = random.randint(1,11)
+		secondCard_dealer = random.randint(1,11)
+	else:
+		firstCard_player = random.randint(1,11)
+		firstCard_dealer = random.randint(1,11)
+
+		secondCard_player = random.randint(1,11)
+		secondCard_dealer = random.randint(1,11)
+
+
+	# TODO We need to write a switch that knows if the game is continued so it adds the new card to totalPlayer and totalDealer
+
+
+	print("----[Now playing Blackjack]----")
+	print("If you bet 0, you'll return to the main menu\n")
+	print("Wallet: $", wallet)
+
+
+	bet = int(input("Please place your bets: $"))
+
+	print("First card: ",firstCard_player)
+	time.sleep(2)
+	print("Dealer first card: ", firstCard_dealer)
+	time.sleep(2)
+	print("Second card player: ", secondCard_player)
+	time.sleep(1)
+	totalPlayer = firstCard_player + secondCard_player
+	print("Total: ", totalPlayer)
+
+	totalDealer = firstCard_dealer + secondCard_dealer
+	# print(totalDealer)
+
+	if totalPlayer <= 20:
+		stbet = input("Do you want to stand or bet? s/b: ")
+		if stbet == "b":
+			card = random.randint(1,11)
+			print("New card: ", card)
+			time.sleep(1.5)
+			card += totalPlayer
+			if totalPlayer > 22:
+				print("Cards: ",totalPlayer)
+				print("Too bad! You lost!")
+				time.sleep(2)
+			elif totalPlayer == 21:
+				print("Cards: ", totalPlayer)
+				print("Blackjack!")
+			else:
+				if totalPlayer < totalDealer and totalDealer >= 17:
+					print("Your Cards: ", totalPlayer)
+					print("Dealer got: ")
+					print("Too bad! You lost!")
+					time.sleep(3)
+					blackjackV2(wallet)
+				elif totalplayer > totalDealer and totalDealer <= 17:
+				else:
+					card1 = random.randint(1,11)
+					card += totalPlayer
+					blackjackV2(wallet, totalPlayer, totalDealer, game_continued=True)
+		if stbet =="s":
+			
 
 #Fire joker slot machine
 def fire_joker(wallet):
@@ -419,15 +483,24 @@ def horses(wallet):
 		clearConsole()
 		horses()
 
-#Start the script and deposit funds
-clearConsole()
-try:
+#First menu to start main menu and to some checks
+def first_menu():
+	clearConsole()
 	print("----[Welcome to Casino Royale]----\n")
 	wallet = int(input("Please deposit funds: $"))
 	errorHandling(wallet)
 	main_menu(wallet)
-except:
-	print("Not a INT!")
-	time.sleep(2)
-	main_menu(wallet=0)
-	
+
+#Check if int
+def errorHandling(arg1, arg2="", arg3="", arg4=""):
+	if isinstance(arg1, int):
+		pass
+	else:
+		usage()
+
+#Restarts scripts when input is not a int
+def usage():
+	print("Please use an integer! Stupid ass bitch! ")
+	time.sleep(1.3)
+
+first_menu()
